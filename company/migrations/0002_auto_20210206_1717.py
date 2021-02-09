@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('company', '0001_initial'),
     ]
@@ -14,6 +13,9 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='vacancy',
             name='published',
-            field=models.DateTimeField(default=datetime.datetime(2021, 2, 6, 17, 17, 23, 653662), verbose_name='Опубликовано'),
+            field=models.DateTimeField(
+                default=datetime.datetime(2021, 2, 6, 17, 17, 23, 653662),
+                verbose_name='Опубликовано'
+            ),
         ),
     ]
