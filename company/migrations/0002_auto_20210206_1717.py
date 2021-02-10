@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
             name='published',
             field=models.DateTimeField(
                 default=datetime.datetime(2021, 2, 6, 17, 17, 23, 653662),
-                verbose_name='Опубликовано'
+                verbose_name='Опубликовано',
             ),
         ),
     ]

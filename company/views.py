@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views.generic.base import View
 from .models import Company, Vacancy, Speciality
+from django.http import HttpResponseNotFound
 
 
 class MainView(View):
@@ -22,7 +23,7 @@ class DetailCompany(View):
         context = {
             'title': company.title,
             'vacancies': vacancies,
-            'company': company
+            'company': company,
         }
         return render(request, 'main/detail_company.html', context)
 
@@ -46,7 +47,7 @@ class DetailSpeciality(View):
             'title': speciality.title,
             'vacancies': vacancies,
             'speciality': speciality,
-            'count_vacancy': count_vacancy
+            'count_vacancy': count_vacancy,
         }
         return render(request, 'main/detail_vacancies.html', context)
 
@@ -56,6 +57,10 @@ class VacanciesView(View):
         vacancies = Vacancy.objects.all()
         context = {
             'title': 'Vacancies',
-            'vacancies': vacancies
+            'vacancies': vacancies,
         }
         return render(request, 'main/vacancies.html', context)
+
+
+def page_not_found(request, exception):
+    return HttpResponseNotFound('<h1>Страница не найдена 404</h1>')

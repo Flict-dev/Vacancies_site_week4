@@ -12,9 +12,11 @@ class VacancyAdmin(admin.ModelAdmin):
         'skills',
         'salary_min',
         'salary_max',
-        'published'
+        'published',
     ]
-    list_display_links = ['title', ]
+    list_display_links = [
+        'title',
+    ]
 
 
 @admin.register(Company)
@@ -25,9 +27,11 @@ class CompanyAdmin(admin.ModelAdmin):
         'location',
         'logo',
         'description',
-        'employee_count'
+        'employee_count',
     ]
-    list_display_links = ['title', ]
+    list_display_links = [
+        'title',
+    ]
 
 
 @admin.register(Speciality)
@@ -36,6 +40,8 @@ class SpecialityAdmin(admin.ModelAdmin):
         'id',
         'title',
         'code',
-        'image'
+        'image',
     ]
-    list_display_links = ['title', ]
+    list_display_links = [
+        'title',
+    ]
