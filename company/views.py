@@ -19,7 +19,7 @@ class MainView(View):
 class DetailCompany(View):
     def get(self, request, pk):
         company = Company.objects.get(pk=pk)
-        vacancies = Vacancy.objects.filter(company=company)
+        vacancies = Vacancy.objects.filter(company=company).select_related('company')
         context = {
             'title': company.title,
             'vacancies': vacancies,
@@ -41,20 +41,18 @@ class DetailVacancy(View):
 class DetailSpeciality(View):
     def get(self, request, code):
         speciality = Speciality.objects.get(code=code)
-        vacancies = Vacancy.objects.filter(speciality=speciality)
-        count_vacancy = vacancies.count()
+        vacancies = Vacancy.objects.filter(speciality=speciality).select_related('company')
         context = {
             'title': speciality.title,
             'vacancies': vacancies,
             'speciality': speciality,
-            'count_vacancy': count_vacancy,
         }
         return render(request, 'main/detail_vacancies.html', context)
 
 
 class VacanciesView(View):
     def get(self, request):
-        vacancies = Vacancy.objects.all()
+        vacancies = Vacancy.objects.all().select_related('company')
         context = {
             'title': 'Vacancies',
             'vacancies': vacancies,
