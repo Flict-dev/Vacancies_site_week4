@@ -8,10 +8,10 @@ SECRET_KEY = '5rz540v*ecob(%&szor3mw$r5p#-2bi8q8hpcj&h9rli7g^&%p'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
 INTERNAL_IPS = [
     '127.0.0.1',
 ]
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -19,8 +19,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'debug_toolbar',
     'company',
+    'debug_toolbar',
 
 ]
 
