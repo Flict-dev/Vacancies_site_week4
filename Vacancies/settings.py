@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'company',
     'debug_toolbar',
+    'crispy_forms',
 
 ]
 
@@ -87,10 +88,12 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_APP_DIR = 'static'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
