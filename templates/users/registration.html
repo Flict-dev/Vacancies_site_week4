@@ -1,5 +1,5 @@
 {% extends 'base/base.html' %}
-{% load crispy_forms_tags %}
+{% load crispy_forms_filters %}
 {% block content %}
     <main class="container">
         <div class="row">
@@ -15,7 +15,6 @@
                     <div class="checkbox mb-3"></div>
                     <button class="btn btn-primary btn-lg btn-block" type="submit">Зарегистрироваться</button>
                 </form>
-
                 <div class="mt-4 text-center"><p>Есть аккаунт? <a href="{% url 'login' %}">Войдите!</a></p></div>
             </div>
         </div>

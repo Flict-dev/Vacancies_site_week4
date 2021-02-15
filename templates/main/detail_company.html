@@ -2,7 +2,7 @@
 {% block content %}
     <main class="container mt-3">
         <div class="navbar mt-5">
-            <p><a href="#">Назад</a></p>
+            <p><a href="javascript:history.go(-1)">Назад</a></p>
         </div>
         <section>
             <div class="text-center">
@@ -20,7 +20,7 @@
                                         <h2 class="h2 pb-2">{{ vacancy.title }}</h2>
                                         <p class="mb-2">{{ vacancy.skills }}</p>
                                         <p>Radyushin & Co • Тольятти • Полный рабочий день</p>
-                                        <p class="text-muted pt-1">9 декабря</p>
+                                        <p class="text-muted pt-1">{{ vacancy.published }}</p>
                                     </div>
                                     <div class="col-12 col-md-4 col-lg-3 d-flex align-items-end">
                                         <a href="{{ vacancy.get_absolute_url }}"><img src="{{ company.logo.url}}" width="130" height="80" alt=""></a>

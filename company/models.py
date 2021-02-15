@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
 
@@ -65,6 +66,12 @@ class Company(models.Model):
     employee_count = models.PositiveSmallIntegerField(
         verbose_name='Кол-во сотрудников',
     )
+    owner = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name='Владелец',
+        null=True  # Убрать псоле удаления баз данных!!!
+    )
 
     class Meta:
         verbose_name = 'Компания'
@@ -100,3 +107,18 @@ class Speciality(models.Model):
 
     def get_absolute_url(self):
         return reverse('detail_speciality', kwargs={"code": self.code})
+
+
+class Application(models.Model):
+    username = models.CharField(max_length=40, verbose_name='Имя')
+    phone = models.CharField(max_length=11, verbose_name='Телефон')
+    letter = models.TextField(max_length=1000, verbose_name='Письмо', default='', null=True)
+    vacancy = models.ForeignKey(Vacancy, on_delete=models.CASCADE, verbose_name='Вакансия')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
+
+    class Meta:
+        verbose_name = 'Отклик'
+        verbose_name_plural = 'Отклики'
+
+    def __str__(self):
+        return self.username

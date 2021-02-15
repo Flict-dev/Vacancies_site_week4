@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     'company',
     'debug_toolbar',
     'crispy_forms',
+    'django_extensions',
 
 ]
 
