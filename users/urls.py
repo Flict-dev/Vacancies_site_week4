@@ -6,7 +6,8 @@ from .views import(
     ProfileCompanyView,
     ProfileVacanciesView,
     ProfileVacanciesEdit,
-    check)
+    check
+)
 
 urlpatterns = [
     path('profile/check/', check, name='check'),

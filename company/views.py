@@ -28,7 +28,7 @@ class DetailCompany(TemplateView):
         context = super(DetailCompany, self).get_context_data(**kwargs)
         context['vacancies'] = (
             Vacancy.objects
-            .filter(company=kwargs['pk'])
+                .filter(company=kwargs['pk'])
         )
         context['company'] = get_object_or_404(Company, pk=kwargs['pk'])
         return context
@@ -55,7 +55,7 @@ class DetailVacancy(View):
             username = form.cleaned_data['username']
             phone = form.cleaned_data['phone']
             letter = form.cleaned_data['letter']
-            Application.objects.create(
+            Application.objects.create(  # Переделать
                 username=username,
                 phone=phone,
                 letter=letter,
@@ -73,12 +73,12 @@ class DetailSpeciality(TemplateView):
         context = super(DetailSpeciality, self).get_context_data(**kwargs)
         context['vacancies'] = (
             Vacancy.objects
-            .filter(speciality__code=kwargs['code'])
-            .select_related('company')
+                .filter(speciality__code=kwargs['code'])
+                .select_related('company')
         )
         context['speciality'] = (
             Speciality.objects
-            .get(code=kwargs['code'])
+                .get(code=kwargs['code'])
         )
         return context
 
@@ -90,7 +90,7 @@ class VacanciesView(TemplateView):
         context = super(VacanciesView, self).get_context_data(**kwargs)
         context['vacancies'] = (
             Vacancy.objects
-            .select_related('company')
+                .select_related('company')
         )
         return context
 
