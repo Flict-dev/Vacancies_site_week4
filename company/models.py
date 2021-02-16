@@ -63,10 +63,11 @@ class Company(models.Model):
         max_length=2000,
         verbose_name='Информация',
     )
-    employee_count = models.PositiveSmallIntegerField(
+    employee_count = models.CharField(
+        max_length=100,
         verbose_name='Кол-во сотрудников',
     )
-    owner = models.ForeignKey(
+    owner = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
         verbose_name='Владелец',

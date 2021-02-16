@@ -1,0 +1,53 @@
+{% extends 'base/base.html' %}
+{% block style %}
+    <style>
+        body {
+            background-color: #F6F2E6;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <main class="container mt-3 pb-5">
+        <div class="row mt-5">
+            {% include 'inc/profile_nav.html' %}
+            <div class="col-12 col-lg-8">
+                <div class="card">
+                    <div class="card-body px-4 pb-4">
+                        <section class="tab-pane fade show active">
+                            <div class="btn-lg btn-block" style="display: flex; justify-content: space-between;">
+                                <h2 class="h4 pt-2 pb-3">Вакансии</h2>
+                                <button class="btn btn-info"><a href="{% url 'edit_vacancy' %}"
+                                                                style="color: #fff; text-decoration: none;">Создать
+                                    вакансию</a></button>
+                            </div>
+                            <!-- vacancy state 1 -->
+                            {% for item in vacancies %}
+                                <div class="card mt-3">
+                                    <div class="card-body px-4">
+                                        <div class="row align-items-center">
+                                            <div class="col-6 col-lg-8">
+                                                <a href="#" class="mb-1">{{ item.title }}</a>
+                                                <p class="mb-1">
+                                                    <span class="mr-4">{{ item.salary_max }}</span><a href="#"
+                                                                                                      class="text-info">3
+                                                    отклика</a>
+                                                </p>
+                                            </div>
+                                            <div class="col-6 col-lg-4 text-right">
+                                                <a href="#" class="btn btn-outline-info">Изменить</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+
+                            <!-- END vacancy state 1 -->
+                            <!-- vacancy state 2 -->
+                            <!-- END vacancy state 2 -->
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

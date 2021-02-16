@@ -31,6 +31,8 @@ class CompanyForm(ModelForm):
         self.helper.form_method = 'post'
         self.helper.add_input(Submit('submit', 'Сохранить'))
 
+    logo = forms.ImageField(required=False)
+
     class Meta:
         model = Company
         fields = ['title', 'location', 'logo', 'description', 'employee_count']
@@ -46,7 +48,7 @@ class VacancyForm(ModelForm):
 
     class Meta:
         model = Vacancy
-        fields = ['title', 'speciality', 'skills', 'salary_min', 'salary_max','published']
+        fields = ['title', 'speciality', 'skills', 'salary_min', 'salary_max', 'published']
         labels = {
             'title': 'Название вакансии',
             'speciality': 'Специализация',
