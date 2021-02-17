@@ -37,7 +37,7 @@
                             <div class="card-body">
                                 <p class="card-text mb-2">{{ speciality.title }}</p>
                                 <p class="card-text"><a
-                                        href="{{ speciality.get_absolute_url }}"> {{ speciality.vacancies.all|length|ru_pluralize:"вакансия, вакансии, вакансий" }}
+                                        href="{{ speciality.get_absolute_url }}"> {{ speciality.vacancy_count|ru_pluralize:"вакансия, вакансии, вакансий" }}
                                 </a>
                                 </p>
                             </div>
@@ -59,7 +59,7 @@
                             <div class="card-body">
                                 <p class="card-text"><a
                                         href="{{ company.get_absolute_url }}">
-                                    {{ company.vacancies.all|length|ru_pluralize:"вакансия, вакансии, вакансий" }}</a>
+                                    {{ company.company_count|ru_pluralize:"вакансия, вакансии, вакансий" }}</a>
                                 </p>
                             </div>
                         </div>

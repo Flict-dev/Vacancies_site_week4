@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
 
@@ -34,6 +35,10 @@ class Vacancy(models.Model):
         default=datetime.now(),
         verbose_name='Опубликовано',
     )
+
+    def clean(self):
+        if self.salary_min > self.salary_max:
+            raise ValidationError('salary_max should be > salary_min')
 
     class Meta:
         verbose_name = 'Вакансия'

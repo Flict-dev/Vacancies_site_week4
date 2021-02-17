@@ -1,11 +1,10 @@
 from django.contrib.auth.models import User
+from django.db.models import Count
 from django.shortcuts import get_object_or_404, render, redirect
-from django.views.generic import DetailView
 from django.views.generic.base import TemplateView, View
 from .models import Company, Vacancy, Speciality, Application
 from .forms import ApplicationForm
 from django.http import HttpResponseNotFound
-
 
 class MainView(TemplateView):
     template_name = 'main/index.html'
@@ -13,10 +12,10 @@ class MainView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(MainView, self).get_context_data(**kwargs)
         context['specialities'] = (
-            Speciality.objects.all()
+            Speciality.objects.all().annotate(vacancy_count=Count('vacancies'))
         )
         context['companies'] = (
-            Company.objects.all()
+            Company.objects.all().annotate(company_count=Count('vacancies'))
         )
         return context
 
@@ -26,11 +25,11 @@ class DetailCompany(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(DetailCompany, self).get_context_data(**kwargs)
+        context['company'] = get_object_or_404(Company, pk=kwargs['pk'])
         context['vacancies'] = (
             Vacancy.objects
-                .filter(company=kwargs['pk'])
+            .filter(company=kwargs['pk'])
         )
-        context['company'] = get_object_or_404(Company, pk=kwargs['pk'])
         return context
 
 
@@ -97,3 +96,7 @@ class VacanciesView(TemplateView):
 
 def page_not_found(request, exception):
     return HttpResponseNotFound('<h1>Страница не найдена 404</h1>')
+
+
+def server_error(request):
+    return HttpResponse(request,'<h1>Ой, что-то сломалось</h1>')
