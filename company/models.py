@@ -128,3 +128,35 @@ class Application(models.Model):
 
     def __str__(self):
         return self.username
+
+
+class Resume(models.Model):
+    GRADE_CHOICES = [
+        ('TR', 'Стажер'),
+        ('JR', 'Джуноир'),
+        ('MD', 'Мидл'),
+        ('SR', 'Синьор'),
+        ('TM', 'Лид')
+    ]
+    STATUS_CHOICES = [
+        ('NS', 'Не ищу работу'),
+        ('SS', 'Рассматриваю предложения'),
+        ('IS', 'Ищу работу'),
+    ]
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='Пользователь')
+    name = models.CharField(max_length=30, verbose_name='Имя')
+    surname = models.CharField(max_length=30, verbose_name='Фамилия')
+    status = models.CharField(max_length=40, choices=STATUS_CHOICES, default='NS', verbose_name='Статус')
+    salary = models.DecimalField(decimal_places=2, max_digits=10, verbose_name='Вознаграждение')
+    speciality = models.ForeignKey(Speciality, on_delete=models.CASCADE, verbose_name='Специализация')
+    grade = models.CharField(max_length=10, choices=GRADE_CHOICES, default='TR', verbose_name='Квалификация')
+    education = models.CharField(max_length=100, verbose_name='Образование')
+    experience = models.CharField(max_length=100, verbose_name='Опыт работы')
+    portfolio = models.CharField(max_length=200, verbose_name='Ссылка на портфолио')
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Резюме'
+        verbose_name_plural = 'Резюме'

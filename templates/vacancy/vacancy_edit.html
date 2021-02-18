@@ -22,24 +22,31 @@
             <div class="col-12 col-lg-8">
                 <div class="card">
                     <div class="card-body px-4 pb-4 tab-content">
-                        <!-- Tab -->
                         <section>
                             <h2 class="h4 pt-2 pb-3">{{ title }}</h2>
-                            <form  method="POST" enctype="multipart/form-data" style="border: none;">
+                            {% if messages %}
+                                {% for message in messages %}
+                                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                        {{ message }}
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                            <form method="POST" enctype="multipart/form-data" style="border: none;">
                                 {% csrf_token %}
                                 {{ form|crispy }}
-                                 <button class="btn btn-info" type="submit">Сохранить</button>
+                                <button class="btn btn-info" type="submit">Сохранить</button>
                             </form>
                             <h2 class="h4 pt-2 pb-3">Отклики - {{ applications.count }}</h2>
                             {% for item in applications %}
-                            <div class="card mt-3">
-                                <div class="card-body px-4">
-                                    <p class="mb-1 font-weight-bold">{{ item.username }}</p>
-                                    <p class="mb-2"><a href="tel:+79002842324" class="text-dark">{{ item.phone }}</a>
-                                    </p>
-                                    <p class="mb-1">{{ item.letter }}</p>
+                                <div class="card mt-3">
+                                    <div class="card-body px-4">
+                                        <p class="mb-1 font-weight-bold">{{ item.username }}</p>
+                                        <p class="mb-2"><a href="tel:+79002842324"
+                                                           class="text-dark">{{ item.phone }}</a>
+                                        </p>
+                                        <p class="mb-1">{{ item.letter }}</p>
+                                    </div>
                                 </div>
-                            </div>
                             {% endfor %}
                         </section>
                     </div>

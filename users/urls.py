@@ -7,15 +7,18 @@ from .views import (
     ProfileVacanciesView,
     ProfileVacanciesEdit,
     ProfileVacanciesCreate,
-    check,
+    check_company,
+    check_resume,
+    ResumeView,
 )
 
-
 urlpatterns = [
-    path('profile/check/', check, name='check'),
+    path('profile/check/', check_company, name='profile_check'),
+    path('resume/check/', check_resume, name='resume_check'),
     path('registration/', MyRegistrationView.as_view(), name='reg'),
     path('login/', MyLoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
+    path('myresume/', ResumeView.as_view(), name='resume'),
     path('mycompany/', ProfileCompanyView.as_view(), name='profile_company'),
     path('mycompany/vacancies/', ProfileVacanciesView.as_view(), name='profile_vacancies'),
     path('mycompany/vacancies/<int:pk>/', ProfileVacanciesEdit.as_view(), name='edit_vacancy'),

@@ -1,10 +1,7 @@
-from crispy_forms.bootstrap import AppendedText, FormActions
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit, Layout, Fieldset
 from django import forms
 from django.forms import ModelForm
 
-from .models import Application, Vacancy, Company
+from .models import Vacancy, Company, Resume
 
 
 class ApplicationForm(forms.Form):
@@ -34,4 +31,30 @@ class VacancyForm(ModelForm):
             'skills': 'Навыки',
             'salary_min': 'Зарплата от',
             'salary_max': 'Зарплата до',
+        }
+
+
+class ResumeForm(ModelForm):
+    class Meta:
+        model = Resume
+        fields = [
+            'name',
+            'surname',
+            'status',
+            'salary',
+            'speciality',
+            'grade',
+            'education',
+            'experience',
+            'portfolio',
+        ]
+        labels = {
+            'name': 'Имя',
+            'surname': 'Фамилия',
+            'speciality': 'Специализация',
+            'status': ' Статус',
+            'grade': 'Зарплата',
+            'education': 'Образование',
+            'experience': 'Опыт работы',
+            'portfolio': 'Портфолио',
         }

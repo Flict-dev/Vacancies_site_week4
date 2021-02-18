@@ -25,7 +25,13 @@
                 </div>
             </div>
         </section>
-
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
         <section class="mt-5 pt-3">
             <h2 class="h2 font-weight-normal text-center mb-5">Вакансии по рубрикам</h2>
             <div class="row mb-0">

@@ -1,20 +1,29 @@
+from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count
 from django.views.generic.base import View
-from company.forms import CompanyForm, VacancyForm
+from company.forms import CompanyForm, VacancyForm, ResumeForm
 from .forms import MyRegistrationForm
 from django.shortcuts import render, redirect
-from company.models import Company, Vacancy, Application
+from company.models import Company, Vacancy, Application, Resume
 
 
-def check(request):
+def check_company(request):
     try:
         Company.objects.get(owner=request.user.id)
         return redirect('/mycompany/')
     except ObjectDoesNotExist:
-        return render(request, 'company/company_check.html', context={})
+        return render(request, 'company/company_check.html')
+
+
+def check_resume(request):
+    try:
+        Resume.objects.get(user=request.user.id)
+        return redirect('/myresume/')
+    except ObjectDoesNotExist:
+        return render(request, 'resume/resume-check.html')
 
 
 class MyRegistrationView(View):
@@ -48,7 +57,8 @@ class ProfileCompanyView(View):
         if form.is_valid():
             defaults = form.cleaned_data
             Company.objects.update_or_create(owner=user.id, defaults=defaults)
-            return redirect('/mycompany/vacancies/')
+            messages.info(request, 'Компания обнавлена')
+            return redirect('/mycompany/')
         return render(request, 'company/company_edit.html', context={'form': form})
 
 
@@ -81,6 +91,7 @@ class ProfileVacanciesEdit(View):
         if form.is_valid():
             form = form.cleaned_data
             Vacancy.objects.update_or_create(defaults=form, company=company)
+            messages.info(request, 'Ваканися обнавлена')
             return redirect('/mycompany/vacancies/')
         return render(request, 'vacancy/vacancy_edit.html', context={'form': form})
 
@@ -108,3 +119,21 @@ class ProfileVacanciesCreate(View):
             )
             return redirect('/mycompany/vacancies/')
         return render(request, 'vacancy/vacancy_create.html', context={'form': form})
+
+
+class ResumeView(View):
+    def get(self, request):
+        try:
+            resume = Resume.objects.get(user=request.user.id)
+            return render(request, 'resume/resume-edit.html', context={'form': ResumeForm(instance=resume)})
+        except ObjectDoesNotExist:
+            return render(request, 'resume/resume-edit.html', context={'form': ResumeForm})
+
+    def post(self, request, *args, **kwargs):
+        form = ResumeForm(request.POST)
+        if form.is_valid():
+            defaults = form.cleaned_data
+            Resume.objects.update_or_create(defaults=defaults, user=request.user)
+            messages.info(request, 'Резюме обнавлено')
+            return redirect('/myresume/')
+        return render(request, 'resume/resume-edit.html', context={'form': form})
