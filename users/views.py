@@ -51,15 +51,19 @@ class ProfileCompanyView(View):
             company = Company.objects.get(owner=request.user.id)
             return render(request, 'company/company_edit.html', context={'form': CompanyForm(instance=company)})
         except ObjectDoesNotExist:
-            return render(request, 'company/company_edit.html', context={'form': CompanyForm()})
+            return render(request, 'company/company_edit.html', context={'form': CompanyForm})
 
     def post(self, request, *args, **kwargs):
         form = CompanyForm(request.POST)
-        user = User(request.user)
+        user = self.request.user
         if form.is_valid():
-            defaults = form.cleaned_data
+            form_data = form.cleaned_data
+            user = request.user if request.user.is_authenticated else None
+
+            defaults = {**form_data}
             defaults['owner'] = user
-            Company.objects.update_or_create(owner_id=user.id, defaults=defaults)
+
+            Company.objects.update_or_create(owner__id=user.id, defaults=defaults)
             messages.info(request, 'Компания обнавлена')
             return redirect('/mycompany/')
         return render(request, 'company/company_edit.html', context={'form': form})

@@ -10,7 +10,8 @@ from .views import (
     check_company,
     check_resume,
     ResumeView,
-    ProfileView, ChangePasswordView,
+    ProfileView,
+    ChangePasswordView,
 )
 
 urlpatterns = [

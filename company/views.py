@@ -64,24 +64,20 @@ class DetailVacancy(View):
                 user=user.pk,
                 vacancy=vacancy
             )
-            return redirect('/sent/success/')
+            return redirect('/send/success/')
         return render(request, 'main/detail_vacancy.html', context={'form': form, 'vacancy': vacancy})
 
 
 class DetailSpeciality(TemplateView):
     template_name = 'main/detail_vacancies.html'
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, *args, **kwargs):
         context = super(DetailSpeciality, self).get_context_data(**kwargs)
-        context['vacancies'] = (
-            Vacancy.objects
-                .filter(speciality__code=kwargs['code'])
-                .select_related('company')
+        speciality = Speciality.objects.get(code=kwargs['code'])
+        context['vacancies'] = Vacancy.objects.filter(speciality=speciality.id).select_related(
+            'company'
         )
-        context['speciality'] = (
-            Speciality.objects
-                .get(code=kwargs['code'])
-        )
+        context['spec_title'] = speciality.title
         return context
 
 
@@ -91,8 +87,7 @@ class VacanciesView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(VacanciesView, self).get_context_data(**kwargs)
         context['vacancies'] = (
-            Vacancy.objects
-                .select_related('company')
+            Vacancy.objects.all().select_related('company')
         )
         return context
 
