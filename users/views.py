@@ -1,10 +1,12 @@
 from django.contrib import messages
+from django.contrib.auth import login
+from django.contrib.auth.hashers import check_password
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db.models import Count
 from django.views.generic.base import View
-from company.forms import CompanyForm, VacancyForm, ResumeForm
+from company.forms import CompanyForm, VacancyForm, ResumeForm, ProfileForm, ChangePasswordForm
 from .forms import MyRegistrationForm
 from django.shortcuts import render, redirect
 from company.models import Company, Vacancy, Application, Resume
@@ -56,7 +58,8 @@ class ProfileCompanyView(View):
         user = User(request.user)
         if form.is_valid():
             defaults = form.cleaned_data
-            Company.objects.update_or_create(owner=user.id, defaults=defaults)
+            defaults['owner'] = user
+            Company.objects.update_or_create(owner_id=user.id, defaults=defaults)
             messages.info(request, 'Компания обнавлена')
             return redirect('/mycompany/')
         return render(request, 'company/company_edit.html', context={'form': form})
@@ -137,3 +140,39 @@ class ResumeView(View):
             messages.info(request, 'Резюме обнавлено')
             return redirect('/myresume/')
         return render(request, 'resume/resume-edit.html', context={'form': form})
+
+
+class ProfileView(View):
+    def get(self, request):
+        return render(request, 'users/profile.html', context={'form': ProfileForm(instance=request.user)})
+
+    def post(self, request, *args, **kwargs):
+        form = ProfileForm(request.POST)
+        if form.is_valid():
+            user = User.objects.get(username=request.user.username)
+            user.first_name = form.cleaned_data['first_name']
+            user.last_name = form.cleaned_data['last_name']
+            user.email = form.cleaned_data['email']
+            user.save()
+            messages.info(request, 'Профиль обновлен')
+        return render(request, 'users/profile.html', context={'form': form})
+
+
+class ChangePasswordView(View):
+    def get(self, request):
+        return render(request, 'users/change_password.html', context={'form': ChangePasswordForm})
+
+    def post(self, request, *args, **kwargs):
+        form = ChangePasswordForm(request.POST)
+        if form.is_valid():
+            user = User.objects.get(username=request.user.username)
+            print(user)
+            password_now = form.cleaned_data['password_now']
+            if user.check_password(password_now):
+                password_new = form.cleaned_data['password_new']
+                user.set_password(password_new)
+                user.save()
+                messages.info(request, 'Пароль успешно обнавлен')
+                return redirect('/login/')
+            form.add_error('password_now', 'Неверный пароль!')
+        return render(request, 'users/change_password.html', context={'form': form})

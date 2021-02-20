@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.models import User
 from django.forms import ModelForm
 
 from .models import Vacancy, Company, Resume
@@ -14,7 +15,11 @@ class ApplicationForm(forms.Form):
 
 
 class CompanyForm(ModelForm):
-    logo = forms.ImageField(required=False)
+    logo = forms.FileField(
+        label='Загрузить',
+        required=False,
+        widget=forms.FileInput(attrs={'class': 'custom-file-input'}),
+    )
 
     class Meta:
         model = Company
@@ -57,4 +62,27 @@ class ResumeForm(ModelForm):
             'education': 'Образование',
             'experience': 'Опыт работы',
             'portfolio': 'Портфолио',
+        }
+
+
+class ProfileForm(ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email']
+        labels = {
+            'first_name': 'Имя',
+            'last_name': 'Фамилия',
+            'email': 'Почта',
+        }
+
+
+class ChangePasswordForm(forms.Form):
+    password_now = forms.CharField(widget=forms.PasswordInput())
+    password_new = forms.CharField(widget=forms.PasswordInput())
+    class Meta:
+
+        fields = ['password_now', 'password_new']
+        labels = {
+            'password_now': 'Текущий пароль',
+            'password_new': 'Новый пароль',
         }

@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
+from Vacancies.settings import MEDIA_COMPANY_IMAGE_DIR, MEDIA_SPECIALITY_IMAGE_DIR
 
 
 class Vacancy(models.Model):
@@ -61,7 +62,7 @@ class Company(models.Model):
         verbose_name='Город',
     )
     logo = models.ImageField(
-        upload_to='images/%Y/%d/%m/',
+        upload_to=MEDIA_COMPANY_IMAGE_DIR,
         verbose_name='Лого',
     )
     description = models.TextField(
@@ -100,7 +101,7 @@ class Speciality(models.Model):
         verbose_name='Название',
     )
     image = models.ImageField(
-        upload_to='images/%Y/%d/%m/',
+        upload_to=MEDIA_SPECIALITY_IMAGE_DIR,
         verbose_name='зображение',
     )
 

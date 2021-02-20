@@ -5,7 +5,7 @@ from .views import (
     DetailCompany,
     DetailVacancy,
     VacanciesView,
-    DetailSpeciality,
+    DetailSpeciality, SentView,
 )
 
 urlpatterns = [
@@ -14,4 +14,5 @@ urlpatterns = [
     path('vacancies/<int:pk>/', DetailVacancy.as_view(), name='detail_vacancy'),
     path('vacancies/cat/<str:code>/', DetailSpeciality.as_view(), name='detail_speciality'),
     path('vacancies/', VacanciesView.as_view(), name='vacancies'),
+    path('send/success/', SentView.as_view(), name='sent')
 ]

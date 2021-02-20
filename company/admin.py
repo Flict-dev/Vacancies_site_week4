@@ -29,6 +29,7 @@ class CompanyAdmin(admin.ModelAdmin):
         'employee_count',
         'owner',
     )
+    list_display_links = ('title',)
     list_filter = ('owner',)
 
 
