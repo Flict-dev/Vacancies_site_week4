@@ -27,7 +27,7 @@
                     <div style="line-height: 1.8;">
                         {{ vacancy.description }}
                     </div>
-                    <form  class="card mt-4 mb-3" enctype="multipart/form-data" method="POST" style="border: none;">
+                    <form  class="card mt-4 mb-3" enctype="multipart/form-data" method="POST" style="border: none; background-color: #F6F2E6">
                         {% csrf_token %}
                         {{ form|crispy }}
                         <button type="submit" class="btn btn-info">Submit</button>

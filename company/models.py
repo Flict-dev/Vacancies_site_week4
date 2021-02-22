@@ -1,7 +1,11 @@
+import sys
 from datetime import datetime
+from io import BytesIO
 
+from PIL import Image
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import models
 from django.urls import reverse
 from Vacancies.settings import MEDIA_COMPANY_IMAGE_DIR, MEDIA_SPECIALITY_IMAGE_DIR
@@ -77,7 +81,7 @@ class Company(models.Model):
         User,
         on_delete=models.CASCADE,
         verbose_name='Владелец',
-        null=True  # Убрать псоле удаления баз данных!!!
+        null=True  # Убрать после обновления бд!!!
     )
 
     class Meta:

@@ -4,7 +4,7 @@ from django.db.models import Count
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic.base import TemplateView, View
 from .models import Company, Vacancy, Speciality, Application
-from .forms import ApplicationForm
+from .forms import ApplicationForm, SearchForm
 from django.http import HttpResponseNotFound, HttpResponse
 
 
@@ -17,7 +17,7 @@ class MainView(TemplateView):
             Speciality.objects.all().annotate(vacancy_count=Count('vacancies'))
         )
         context['companies'] = (
-            Company.objects.all().annotate(company_count=Count('vacancies'))
+            Company.objects.order_by('-company_count')[:8].annotate(company_count=Count('vacancies'))
         )
         return context
 
@@ -92,8 +92,35 @@ class VacanciesView(TemplateView):
         return context
 
 
+class CompaniesView(TemplateView):
+    template_name = 'main/companies.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(CompaniesView, self).get_context_data(**kwargs)
+        context['companies'] = (
+            Company.objects.all().annotate(company_count=Count('vacancies'))
+        )
+        return context
+
+
 class SentView(TemplateView):
     template_name = 'main/sent.html'
+
+
+class SearchView(View):
+    def get(self, request):
+        data = request.GET.get('data', False)
+        if data:
+            vacancies = Vacancy.objects.filter(
+                title__icontains=data,
+                skills__icontains=data,
+                speciality__title__iexact=data
+            ).select_related('company')
+            context = {
+                'vacancies': vacancies,
+                'form': SearchForm
+            }
+            return render(request, 'main/search.html', context=context)
 
 
 def page_not_found(request, exception):

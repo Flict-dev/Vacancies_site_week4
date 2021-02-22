@@ -1,9 +1,7 @@
 from django.contrib import messages
-from django.contrib.auth import login
-from django.contrib.auth.hashers import check_password
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
-from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count
 from django.views.generic.base import View
 from company.forms import CompanyForm, VacancyForm, ResumeForm, ProfileForm, ChangePasswordForm
@@ -54,11 +52,10 @@ class ProfileCompanyView(View):
             return render(request, 'company/company_edit.html', context={'form': CompanyForm})
 
     def post(self, request, *args, **kwargs):
-        form = CompanyForm(request.POST)
+        form = CompanyForm(request.POST, request.FILES)
         user = self.request.user
         if form.is_valid():
             form_data = form.cleaned_data
-            user = request.user if request.user.is_authenticated else None
 
             defaults = {**form_data}
             defaults['owner'] = user
@@ -170,7 +167,6 @@ class ChangePasswordView(View):
         form = ChangePasswordForm(request.POST)
         if form.is_valid():
             user = User.objects.get(username=request.user.username)
-            print(user)
             password_now = form.cleaned_data['password_now']
             if user.check_password(password_now):
                 password_new = form.cleaned_data['password_new']

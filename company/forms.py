@@ -15,12 +15,6 @@ class ApplicationForm(forms.Form):
 
 
 class CompanyForm(ModelForm):
-    logo = forms.FileField(
-        label='Загрузить',
-        required=False,
-        widget=forms.FileInput(attrs={'class': 'custom-file-input'}),
-    )
-
     class Meta:
         model = Company
         fields = ['title', 'location', 'logo', 'description', 'employee_count']
@@ -58,7 +52,7 @@ class ResumeForm(ModelForm):
             'surname': 'Фамилия',
             'speciality': 'Специализация',
             'status': ' Статус',
-            'grade': 'Зарплата',
+            'grade': 'Квалификация',
             'education': 'Образование',
             'experience': 'Опыт работы',
             'portfolio': 'Портфолио',
@@ -79,10 +73,17 @@ class ProfileForm(ModelForm):
 class ChangePasswordForm(forms.Form):
     password_now = forms.CharField(widget=forms.PasswordInput())
     password_new = forms.CharField(widget=forms.PasswordInput())
-    class Meta:
 
+    class Meta:
         fields = ['password_now', 'password_new']
         labels = {
             'password_now': 'Текущий пароль',
             'password_new': 'Новый пароль',
         }
+
+
+class SearchForm(forms.Form):
+    data = forms.CharField(max_length=30, label='Поиск')
+
+    class Meta:
+        fields = ['data']
