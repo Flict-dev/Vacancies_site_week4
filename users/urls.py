@@ -1,5 +1,7 @@
 from django.contrib.auth.views import LogoutView
 from django.urls import path
+
+from company.views import ApplicationResumeView
 from .views import (
     MyLoginView,
     MyRegistrationView,
@@ -27,4 +29,5 @@ urlpatterns = [
     path('mycompany/vacancies/', ProfileVacanciesView.as_view(), name='profile_vacancies'),
     path('mycompany/vacancies/<int:pk>/', ProfileVacanciesEdit.as_view(), name='edit_vacancy'),
     path('mycompany/vacancies/create/', ProfileVacanciesCreate.as_view(), name='create_vacancy'),
+    path('resume/<int:pk>/', ApplicationResumeView.as_view(), name='user_resume')
 ]

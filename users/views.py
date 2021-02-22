@@ -1,8 +1,10 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count
+from django.utils.decorators import method_decorator
 from django.views.generic.base import View
 from company.forms import CompanyForm, VacancyForm, ResumeForm, ProfileForm, ChangePasswordForm
 from .forms import MyRegistrationForm
@@ -43,6 +45,7 @@ class MyLoginView(LoginView):
     template_name = 'users/login.html'
 
 
+@method_decorator(login_required, name='get')
 class ProfileCompanyView(View):
     def get(self, request):
         try:
@@ -66,6 +69,7 @@ class ProfileCompanyView(View):
         return render(request, 'company/company_edit.html', context={'form': form})
 
 
+@method_decorator(login_required, name='get')
 class ProfileVacanciesView(View):
     def get(self, request):
         try:
@@ -100,6 +104,7 @@ class ProfileVacanciesEdit(View):
         return render(request, 'vacancy/vacancy_edit.html', context={'form': form})
 
 
+@method_decorator(login_required, name='get')
 class ProfileVacanciesCreate(View):
     def get(self, request):
         return render(request, 'vacancy/vacancy_create.html', context={'form': VacancyForm})
@@ -125,6 +130,7 @@ class ProfileVacanciesCreate(View):
         return render(request, 'vacancy/vacancy_create.html', context={'form': form})
 
 
+@method_decorator(login_required, name='get')
 class ResumeView(View):
     def get(self, request):
         try:
@@ -143,6 +149,7 @@ class ResumeView(View):
         return render(request, 'resume/resume-edit.html', context={'form': form})
 
 
+@method_decorator(login_required, name='get')
 class ProfileView(View):
     def get(self, request):
         return render(request, 'users/profile.html', context={'form': ProfileForm(instance=request.user)})
@@ -159,6 +166,7 @@ class ProfileView(View):
         return render(request, 'users/profile.html', context={'form': form})
 
 
+@method_decorator(login_required, name='get')
 class ChangePasswordView(View):
     def get(self, request):
         return render(request, 'users/change_password.html', context={'form': ChangePasswordForm})

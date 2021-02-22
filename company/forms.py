@@ -1,3 +1,6 @@
+from crispy_forms.bootstrap import FormActions, AppendedText, PrependedText
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit, Layout, Fieldset
 from django import forms
 from django.contrib.auth.models import User
 from django.forms import ModelForm
@@ -34,6 +37,39 @@ class VacancyForm(ModelForm):
 
 
 class ResumeForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+
+        self.helper.form_method = 'post'
+
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-lg-6'
+        self.helper.field_class = 'col-lg-6'
+        self.helper.layout = Layout(
+            Fieldset(
+                'Личные данные:',
+                AppendedText('name', '', placeholder="Ваше имя"),
+                AppendedText('surname', '', placeholder="Ваша фамилия"),
+                'grade',
+                AppendedText('speciality', '', placeholder="Специализация"),
+            ),
+            Fieldset(
+                '<hr>'
+            ),
+            Fieldset(
+                'Остальное:',
+                AppendedText('education', '', placeholder="Образовнаие"),
+                AppendedText('experience', '', placeholder="Опыт работы"),
+                AppendedText('status', '', placeholder="Готовность к работе"),
+                AppendedText('salary', '', placeholder="Ваше вознограждение"),
+                AppendedText('portfolio', '', placeholder="Ссылка на git"),
+            ),
+            FormActions(
+                Submit('submit', 'Сохранить'),
+            )
+        )
+
     class Meta:
         model = Resume
         fields = [
@@ -71,19 +107,25 @@ class ProfileForm(ModelForm):
 
 
 class ChangePasswordForm(forms.Form):
-    password_now = forms.CharField(widget=forms.PasswordInput())
-    password_new = forms.CharField(widget=forms.PasswordInput())
+    password_now = forms.CharField(widget=forms.PasswordInput(), label='Текущий пароль')
+    password_new = forms.CharField(widget=forms.PasswordInput(), label='Новый пароль')
 
     class Meta:
         fields = ['password_now', 'password_new']
-        labels = {
-            'password_now': 'Текущий пароль',
-            'password_new': 'Новый пароль',
-        }
 
 
 class SearchForm(forms.Form):
-    data = forms.CharField(max_length=30, label='Поиск')
+    data = forms.CharField(
+        max_length=30,
+        label='Поиск по вакансиям',
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control w-100',
+                'placeholder': 'Найти работу или стажировку',
+                'aria-label': 'Найти работу или стажировку',
+            },
+        ))
 
     class Meta:
         fields = ['data']

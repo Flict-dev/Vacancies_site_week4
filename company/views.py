@@ -1,9 +1,9 @@
 from django.contrib import messages
 from django.contrib.auth.models import User
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic.base import TemplateView, View
-from .models import Company, Vacancy, Speciality, Application
+from .models import Company, Vacancy, Speciality, Application, Resume
 from .forms import ApplicationForm, SearchForm
 from django.http import HttpResponseNotFound, HttpResponse
 
@@ -19,6 +19,7 @@ class MainView(TemplateView):
         context['companies'] = (
             Company.objects.order_by('-company_count')[:8].annotate(company_count=Count('vacancies'))
         )
+        context['form'] = SearchForm
         return context
 
 
@@ -82,7 +83,7 @@ class DetailSpeciality(TemplateView):
 
 
 class VacanciesView(TemplateView):
-    template_name = 'main/vacancies.html'
+    template_name = 'main/all_vacancies.html'
 
     def get_context_data(self, **kwargs):
         context = super(VacanciesView, self).get_context_data(**kwargs)
@@ -93,7 +94,7 @@ class VacanciesView(TemplateView):
 
 
 class CompaniesView(TemplateView):
-    template_name = 'main/companies.html'
+    template_name = 'main/all_companies.html'
 
     def get_context_data(self, **kwargs):
         context = super(CompaniesView, self).get_context_data(**kwargs)
@@ -111,16 +112,24 @@ class SearchView(View):
     def get(self, request):
         data = request.GET.get('data', False)
         if data:
-            vacancies = Vacancy.objects.filter(
-                title__icontains=data,
-                skills__icontains=data,
-                speciality__title__iexact=data
-            ).select_related('company')
-            context = {
-                'vacancies': vacancies,
-                'form': SearchForm
-            }
-            return render(request, 'main/search.html', context=context)
+            vacancies = Vacancy.objects.filter(Q(title__icontains=data) | Q(skills__icontains=data)).select_related('company')
+        else:
+            vacancies = Vacancy.objects.all().select_related('company')
+        context = {
+            'vacancies': vacancies,
+            'form': SearchForm(request.GET),
+        }
+        return render(request, 'main/search.html', context=context)
+
+
+class ApplicationResumeView(TemplateView):
+    template_name = 'resume/user_resume.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ApplicationResumeView, self).get_context_data(**kwargs)
+        user_app = Application.objects.get(pk=kwargs['pk'])
+        context['resume'] = Resume.objects.get(user=user_app.user)
+        return context
 
 
 def page_not_found(request, exception):
