@@ -29,5 +29,5 @@ urlpatterns = [
     path('mycompany/vacancies/', ProfileVacanciesView.as_view(), name='profile_vacancies'),
     path('mycompany/vacancies/<int:pk>/', ProfileVacanciesEdit.as_view(), name='edit_vacancy'),
     path('mycompany/vacancies/create/', ProfileVacanciesCreate.as_view(), name='create_vacancy'),
-    path('resume/<int:pk>/', ApplicationResumeView.as_view(), name='user_resume')
+    path('resume/<int:pk>/', ApplicationResumeView.as_view(), name='user_resume'),
 ]

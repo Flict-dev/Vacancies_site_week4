@@ -36,8 +36,7 @@ class Company(models.Model):
     logo = models.ImageField(upload_to=MEDIA_COMPANY_IMAGE_DIR, verbose_name='Лого')
     description = models.TextField(max_length=2000, verbose_name='Информация')
     employee_count = models.CharField(max_length=100, verbose_name='Кол-во сотрудников')
-    owner = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='Владелец',
-                                 null=True)  # Убрать после обновления бд!!!)
+    owner = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='Владелец', default=User)
 
     class Meta:
         verbose_name = 'Компания'
@@ -69,7 +68,7 @@ class Speciality(models.Model):
 class Application(models.Model):
     username = models.CharField(max_length=40, verbose_name='Имя')
     phone = models.CharField(max_length=20, verbose_name='Телефон')
-    letter = models.TextField(max_length=1000, verbose_name='Письмо', default='', null=True)
+    letter = models.TextField(max_length=1000, verbose_name='Письмо', default='', blank=True)
     vacancy = models.ForeignKey(Vacancy, on_delete=models.CASCADE, verbose_name='Вакансия')
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
 
@@ -87,7 +86,7 @@ class Resume(models.Model):
         ('JR', 'Джуноир'),
         ('MD', 'Мидл'),
         ('SR', 'Синьор'),
-        ('TM', 'Лид')
+        ('TM', 'Лид'),
     ]
     STATUS_CHOICES = [
         ('NS', 'Не ищу работу'),

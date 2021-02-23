@@ -75,7 +75,8 @@ class ProfileVacanciesView(View):
         try:
             company = Company.objects.get(owner=self.request.user.id)
             context = {
-                'vacancies': Vacancy.objects.filter(company=company).annotate(app_count=Count('application'))
+                'vacancies': Vacancy.objects.filter(company=company)
+                .annotate(app_count=Count('application')),
             }
             return render(request, 'vacancy/vacancy-list.html', context=context)
         except ObjectDoesNotExist:
@@ -89,7 +90,7 @@ class ProfileVacanciesEdit(View):
         context = {
             'title': vacancy.title,
             'form': VacancyForm(instance=vacancy),
-            'applications': applications
+            'applications': applications,
         }
         return render(request, 'vacancy/vacancy_edit.html', context=context)
 

@@ -14,10 +14,13 @@ class MainView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(MainView, self).get_context_data(**kwargs)
         context['specialities'] = (
-            Speciality.objects.all().annotate(vacancy_count=Count('vacancies'))
+            Speciality.objects.all()
+            .annotate(vacancy_count=Count('vacancies'))
         )
         context['companies'] = (
-            Company.objects.order_by('-company_count')[:8].annotate(company_count=Count('vacancies'))
+            Company.objects
+            .order_by('-company_count')[:8]
+            .annotate(company_count=Count('vacancies'))
         )
         context['form'] = SearchForm
         return context
@@ -31,7 +34,7 @@ class DetailCompany(TemplateView):
         context['company'] = get_object_or_404(Company, pk=kwargs['pk'])
         context['vacancies'] = (
             Vacancy.objects
-                .filter(company=kwargs['pk'])
+            .filter(company=kwargs['pk'])
         )
         return context
 
@@ -63,7 +66,7 @@ class DetailVacancy(View):
                 phone=phone,
                 letter=letter,
                 user=user.pk,
-                vacancy=vacancy
+                vacancy=vacancy,
             )
             return redirect('/send/success/')
         return render(request, 'main/detail_vacancy.html', context={'form': form, 'vacancy': vacancy})
@@ -75,9 +78,9 @@ class DetailSpeciality(TemplateView):
     def get_context_data(self, *args, **kwargs):
         context = super(DetailSpeciality, self).get_context_data(**kwargs)
         speciality = Speciality.objects.get(code=kwargs['code'])
-        context['vacancies'] = Vacancy.objects.filter(speciality=speciality.id).select_related(
-            'company'
-        )
+        context['vacancies'] = Vacancy.objects\
+            .filter(speciality=speciality.id)\
+            .select_related('company')
         context['spec_title'] = speciality.title
         return context
 
@@ -99,7 +102,8 @@ class CompaniesView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(CompaniesView, self).get_context_data(**kwargs)
         context['companies'] = (
-            Company.objects.all().annotate(company_count=Count('vacancies'))
+            Company.objects.all()
+            .annotate(company_count=Count('vacancies'))
         )
         return context
 
@@ -112,7 +116,9 @@ class SearchView(View):
     def get(self, request):
         data = request.GET.get('data', False)
         if data:
-            vacancies = Vacancy.objects.filter(Q(title__icontains=data) | Q(skills__icontains=data)).select_related('company')
+            vacancies = Vacancy.objects\
+                .filter(Q(title__icontains=data) | Q(skills__icontains=data))\
+                .select_related('company')
         else:
             vacancies = Vacancy.objects.all().select_related('company')
         context = {

@@ -1,4 +1,4 @@
-from crispy_forms.bootstrap import FormActions, AppendedText, PrependedText
+from crispy_forms.bootstrap import FormActions, AppendedText
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Fieldset
 from django import forms
@@ -55,7 +55,7 @@ class ResumeForm(ModelForm):
                 AppendedText('speciality', '', placeholder="Специализация"),
             ),
             Fieldset(
-                '<hr>'
+                '<hr>',
             ),
             Fieldset(
                 'Остальное:',
@@ -67,7 +67,7 @@ class ResumeForm(ModelForm):
             ),
             FormActions(
                 Submit('submit', 'Сохранить'),
-            )
+            ),
         )
 
     class Meta:
