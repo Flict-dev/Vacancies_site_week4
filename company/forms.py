@@ -14,19 +14,19 @@ class ApplicationForm(forms.Form):
     letter = forms.CharField(max_length=1500, widget=forms.Textarea, required=False, label='Письмо')
 
     class Meta:
-        fields = ['username', 'phone', 'letter']
+        fields = ('username', 'phone', 'letter')
 
 
 class CompanyForm(ModelForm):
     class Meta:
         model = Company
-        fields = ['title', 'location', 'logo', 'description', 'employee_count']
+        fields = ('title', 'location', 'logo', 'description', 'employee_count')
 
 
 class VacancyForm(ModelForm):
     class Meta:
         model = Vacancy
-        fields = ['title', 'speciality', 'skills', 'salary_min', 'salary_max']
+        fields = ('title', 'speciality', 'skills', 'salary_min', 'salary_max')
         labels = {
             'title': 'Название вакансии',
             'speciality': 'Специализация',
@@ -72,7 +72,7 @@ class ResumeForm(ModelForm):
 
     class Meta:
         model = Resume
-        fields = [
+        fields = (
             'name',
             'surname',
             'status',
@@ -82,7 +82,7 @@ class ResumeForm(ModelForm):
             'education',
             'experience',
             'portfolio',
-        ]
+        )
         labels = {
             'name': 'Имя',
             'surname': 'Фамилия',
@@ -98,7 +98,7 @@ class ResumeForm(ModelForm):
 class ProfileForm(ModelForm):
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'email']
+        fields = ('first_name', 'last_name', 'email')
         labels = {
             'first_name': 'Имя',
             'last_name': 'Фамилия',
@@ -111,7 +111,7 @@ class ChangePasswordForm(forms.Form):
     password_new = forms.CharField(widget=forms.PasswordInput(), label='Новый пароль')
 
     class Meta:
-        fields = ['password_now', 'password_new']
+        fields = ('password_now', 'password_new')
 
 
 class SearchForm(forms.Form):
@@ -128,4 +128,4 @@ class SearchForm(forms.Form):
         ))
 
     class Meta:
-        fields = ['data']
+        fields = ('data',)

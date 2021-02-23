@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic.base import TemplateView, View
@@ -78,8 +79,8 @@ class DetailSpeciality(TemplateView):
     def get_context_data(self, *args, **kwargs):
         context = super(DetailSpeciality, self).get_context_data(**kwargs)
         speciality = Speciality.objects.get(code=kwargs['code'])
-        context['vacancies'] = Vacancy.objects\
-            .filter(speciality=speciality.id)\
+        context['vacancies'] = Vacancy.objects \
+            .filter(speciality=speciality.id) \
             .select_related('company')
         context['spec_title'] = speciality.title
         return context
@@ -116,8 +117,8 @@ class SearchView(View):
     def get(self, request):
         data = request.GET.get('data', False)
         if data:
-            vacancies = Vacancy.objects\
-                .filter(Q(title__icontains=data) | Q(skills__icontains=data))\
+            vacancies = Vacancy.objects \
+                .filter(Q(title__icontains=data) | Q(skills__icontains=data)) \
                 .select_related('company')
         else:
             vacancies = Vacancy.objects.all().select_related('company')
@@ -134,8 +135,13 @@ class ApplicationResumeView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(ApplicationResumeView, self).get_context_data(**kwargs)
         user_app = Application.objects.get(pk=kwargs['pk'])
-        context['resume'] = Resume.objects.get(user=user_app.user)
-        return context
+        try:
+            context['resume'] = Resume.objects.get(user=user_app.user)
+            context['exist'] = False
+            return context
+        except ObjectDoesNotExist:
+            context['exist'] = True
+            return context
 
 
 def page_not_found(request, exception):

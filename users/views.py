@@ -74,10 +74,9 @@ class ProfileVacanciesView(View):
     def get(self, request):
         try:
             company = Company.objects.get(owner=self.request.user.id)
-            context = {
-                'vacancies': Vacancy.objects.filter(company=company)
-                .annotate(app_count=Count('application')),
-            }
+            vacancies = Vacancy.objects.filter(company=company) \
+                .annotate(app_count=Count('application')).select_related('company')
+            context = {'vacancies': vacancies}
             return render(request, 'vacancy/vacancy-list.html', context=context)
         except ObjectDoesNotExist:
             return redirect('/profile/check/')
