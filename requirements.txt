@@ -7,6 +7,7 @@ colorama==0.4.4
 Django==3.0.4
 django-crispy-forms==1.11.0
 django-debug-toolbar==3.2
+django-extensions==3.1.1
 djangorescue==0.0.2
 eradicate==2.0.0
 flake8==3.8.4
