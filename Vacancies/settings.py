@@ -93,9 +93,6 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'company.static'),
-]
 STATIC_APP_DIR = 'static'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
