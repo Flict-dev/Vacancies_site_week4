@@ -64,7 +64,7 @@ class ProfileCompanyView(View):
             defaults['owner'] = user
 
             Company.objects.update_or_create(owner__id=user.id, defaults=defaults)
-            messages.info(request, 'Компания обнавлена')
+            messages.info(request, 'Компания обновлена')
             return redirect('/mycompany/')
         return render(request, 'company/company_edit.html', context={'form': form})
 
@@ -99,7 +99,7 @@ class ProfileVacanciesEdit(View):
         if form.is_valid():
             form = form.cleaned_data
             Vacancy.objects.update_or_create(defaults=form, company=company)
-            messages.info(request, 'Ваканися обнавлена')
+            messages.info(request, 'Ваканися обновлена')
             return redirect('/mycompany/vacancies/')
         return render(request, 'vacancy/vacancy_edit.html', context={'form': form})
 
@@ -144,7 +144,7 @@ class ResumeView(View):
         if form.is_valid():
             defaults = form.cleaned_data
             Resume.objects.update_or_create(defaults=defaults, user=request.user)
-            messages.info(request, 'Резюме обнавлено')
+            messages.info(request, 'Резюме обновлено')
             return redirect('/myresume/')
         return render(request, 'resume/resume-edit.html', context={'form': form})
 
@@ -180,7 +180,7 @@ class ChangePasswordView(View):
                 password_new = form.cleaned_data['password_new']
                 user.set_password(password_new)
                 user.save()
-                messages.info(request, 'Пароль успешно обнавлен')
+                messages.info(request, 'Пароль успешно обновлен')
                 return redirect('/login/')
             form.add_error('password_now', 'Неверный пароль!')
         return render(request, 'users/change_password.html', context={'form': form})
