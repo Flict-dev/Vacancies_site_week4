@@ -1,3 +1,5 @@
-# Для запуска проекта вам потребуется
-- Активировать виртуальное окружение (python -m vevn venv)
-- Загрузить requirements.txt (pip install requirements.txt)
+## For start you need:
+- python -m venv env
+- env\Scripts\activate
+- pip intsall -r requirements.txt
+- python manage.py runserver
